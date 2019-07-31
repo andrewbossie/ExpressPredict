@@ -1,0 +1,36 @@
+<!doctype html>
+    <head>
+        <meta name="viewport" content= "width=device-width, initial-scale=1.0"> 
+        <title>{{ header }}</title>
+        <!-- Relavant links -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css.map') }}">
+        <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    </head>
+    <body>
+        <div class="wrapper container">
+            <!-- Title -->
+            <div class="row title">
+                <h1>ExpressPredict</h1>
+            </div>
+            <!-- Brief Description -->
+            <div class="row description">
+                <div class="col-lg-12"><h3>What it is:</h3></div>
+                <div class="col-lg-12">
+                <p>                
+                    An all-in-one data science suite including functionality for data exploration and 
+                    time-series prediction. 
+                </p>
+                </div>
+                <a href="auth/signin"><button class="btn btn-primary">SignIn</button></a>
+                <a href="auth/signup"><button class="btn btn-primary">SignUp</button></a>
+            </div>
+            <!-- Examples -->
+            <div class="row examples">
+                <h3>Some Examples:</h3>
+                <p>Example 1</p>
+                <p>Example 2</p>
+            </div>
+        </div>
+    </body>
+</html>
