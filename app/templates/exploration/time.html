@@ -1,0 +1,339 @@
+<html>
+    <head>
+        <meta name="viewport" content= "width=device-width, initial-scale=1.0"> 
+        <title>{{ header }}</title>
+        <!-- Relevant links -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css.map') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
+        <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/explore.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/Chart.bundle.js') }}"></script>
+        <style>
+            ul{
+                list-style-type:none;
+            }
+            a{
+                text-decoration: none;
+                color: aliceblue;
+            }
+
+            a:visited{
+                color: aliceblue;
+            }
+
+            a:hover{
+                color: aliceblue;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid" style="padding-left: 0px; padding-right: 0px;">
+
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-2 sidebar text-center">
+                    <br />
+                        <h3>ExpressConnect</h3>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <h5>Modules</h5>
+                        <hr>
+                        <ul class="menu-list">
+                            <li class="parent-collapse" id="explore"><u>Explore &#8250;</u>
+                                <div class="explore-collapse" style="display: none;">
+                                    <ul>
+                                        <li><a href="/explore/time">Time-Series</a></li>
+                                        <li><a href="/explore/regression">Regression</a></li>
+                                        <li><a href="/explore/classifcation">Classification</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="parent-collapse" id="analyze"><u>Analyze &#8250;</u>
+                                <div class="analyze-collapse" style="display: none;">
+                                    <ul>
+                                        <li><a href="/analyze/time">Time-Series</a></li>
+                                        <li><a href="/analyze/linregression">Linear Regression</a></li>
+                                        <li><a href="/analyze/logregression">Logistic Regression</a></li>
+                                        <li><a href="/analyze/tree">Decision Tree</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li><u>Big Data &#8250;</u></li>
+                        </ul>
+                </div>
+                <div class="col-md-10">
+                    <!-- Login / Signup --> 
+                    <div class="row text-right"  style="padding-top: 10px; height: 40px;">
+                        <div class="col-md-12">
+                            <a href="auth/logout"><button class="btn btn-sm btn-landing"  style="margin-right: 20px;">Logout</button></a>
+                        </div>
+                    </div>
+
+
+                    <!-- Title -->
+                    <div class="row title text-center">
+                            <div class="col-md-3"></div>
+                        <div class="col-md-4">
+                            <br />
+                            <h1>Explore | Time-Series</h1>
+                        </div>
+                        <div class="col-md-5"></div>
+                    </div>
+                    <br />
+                    <br />
+
+
+                    <!-- Brief Description -->
+                    <div class="row description text-center">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-4">
+                            <!-- <h3>Information</h3><hr> -->
+                            <p>   
+                                Exploration and visualization is an indispensible step in effectively understanding your data.             
+                                In this module you can upload your time-series data and our semi-autonomous exploration algorithm will 
+                                attempt to analyze and give you some insight. These include heatmaps, plots and
+                                statistical information. 
+                            </p>
+                        </div>
+                        <div class="col-md-5"></div>
+                        <br />
+                        <br />
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+
+                    <!-- File Upload -->
+                    <div class="row text-center">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-4">
+                                <h3 class="text-center">Upload a File &#709;</h3>
+                                <hr>
+                                <br />
+                                <div class="row upload-collapse">
+                                    <form id="uploadForm" method="POST" enctype="multipart/form-data" action="#" role="form">
+                                            {{ form.csrf_token }}
+                                            {{ form.data_file() }}
+                                            <p class="text-center" style="margin-top: 5px;"><small><i>(CSV or EXCEL only. Header row expected)</i></small></p>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <br />
+                                                    <label>X Label</label>
+                                                    {{ form.x(class_='form-control') }}<br />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <br />
+                                                    <label>Y Label</label>
+                                                    {{ form.y(class_='form-control') }}
+                                                </div>
+                                            </div>
+                                            <label>Is Data Measured in Currency?</label>
+                                            <br />
+                                            {{ form.currency() }}
+                                            <br />
+                                            <br />
+                                            </form>
+                                        <div class="col-12 text-center">
+                                            <button class="btn btn-md btn-landing submit-time">Submit</button>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="col-md-5"></div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <!-- Raw Plot with Trend Line -->
+                    <div class="row text-center formatted">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-6">
+                                    <h3 class="text-center">Raw Plot &#8250;</h3>
+                                    <hr>
+                                    <br />
+                                    <div class="row raw-collapse" style="display: none;">
+                                        <div id="raw">
+                                            <canvas id="raw_chart" width="700" height="400"></canvas>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <!-- Seasonality Reduction with # of Reductions -->
+                    <div class="row text-center">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-6">
+                                    <h3 class="text-center">De-Trend Plot &#8250;</h3>
+                                    <hr>
+                                <br />
+                                <div class="row formatted-collapse" style="display: none;">
+                                    <div id="formatted">
+                                        <canvas id="formatted_chart" width="700" height="400"></canvas>
+                                        <p><i>(Note: Formatted data will result in n - 1 data points compared to the input values)</i></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <!-- Stats / Dicky Fuller -->
+                    <div class="row text-center">
+                            <div class="col-md-3"></div>
+                            <div class="col-4">
+                                    <h3 class="text-center">Sample Statistics & <br />Dicky Fuller Analysis &#8250;</h3>
+                                    <hr>
+                                    <div class="text-left" id="sample_stats"></div>
+                            </div>
+                            <div class="col-md-5"></div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <!-- Export -->
+                    <div class="row text-center">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-4">
+                                    <h3 class="text-center">Export &#8250;</h3>
+                                    <hr>
+                            </div>
+                            <div class="col-5"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        $('.submit-time').on('click', function(e){
+
+            e.preventDefault;
+            $('.upload-collapse').slideUp('slow');
+
+            var form = $('#uploadForm')[0];
+            var form_data = new FormData(form);
+
+            // send file and vars to back end for processing
+            $.ajax({
+                url: '/explore/upload',
+                type: 'POST',
+                data: form_data,
+                cache: false,
+                contentType : false,
+                processData : false,
+                success: function(response){
+                    console.log(response);
+
+                    // Focus on formatted plot
+                    $('body, html').animate({
+                        scrollTop: $(".formatted").offset().top - 300
+                    }, 600);
+
+                    // Raw Chart
+                    var raw_labels = ['1' ,'2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+
+                    var raw_data = [];
+                    for(var i = 0; i < response['raw'].length; i++){
+                        raw_data[i] = response['raw'][i][0]
+                    }
+                    $('.raw-collapse').show('slow');
+                    var ctx = document.getElementById('raw_chart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: raw_labels,
+                            datasets: [{
+                                data: raw_data,
+                                borderColor: [
+                                    'rgba(54, 162, 235, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            },
+                            elements: {
+                                line: {
+                                    tension: 0 // disables bezier curves
+                                }
+                            }
+                        }
+                    });
+
+                    // Formatted Chart
+                    var formatted_labels = ['1' ,'2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+
+                    var formatted_data = [];
+                    for(var i = 0; i < response['formatted'].length; i++){
+                        formatted_data[i] = response['formatted'][i]
+                    }
+
+                    $('.formatted-collapse').show('slow');
+                    var ftx = document.getElementById('formatted_chart').getContext('2d');
+                    var formattedChart = new Chart(ftx, {
+                        type: 'line',
+                        data: {
+                            labels: formatted_labels,
+                            datasets: [{
+                                data: formatted_data,
+                                borderColor: [
+                                    'rgba(54, 162, 235, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            },
+                            elements: {
+                                line: {
+                                    tension: 0 // disables bezier curves
+                                }
+                            }
+                        }
+                    });
+
+                //    Sample Stats
+                    $('#sample_stats').html(
+                        'Raw Mean: ' + response['raw_mean'] + '<br />' +
+                        'Raw Variance: ' + response['raw_var'] + '<br />' +
+                        'Raw Std: ' + response['raw_std'] + '<br />' +
+                        'Formatted Mean: ' + response['formatted_mean'] + '<br />' +
+                        'Formatted Variance: ' + response['formatted_var'] + '<br />' +
+                        'Formatted Std: ' + response['formatted_std'] + '<br />'
+                    );
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+</html>

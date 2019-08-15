@@ -8,3 +8,8 @@ mod_main = Blueprint('main', __name__)
 @mod_main.route('/', methods=['GET'])
 def landing():
     return render_template("main/landing.html", header="EP | Welcome")
+
+# Home Page
+@mod_main.route('/home', methods=['GET'])
+def home():
+    return render_template("main/home.html", header="EP | Welcome")

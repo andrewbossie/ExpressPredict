@@ -5,31 +5,61 @@
         <!-- Relavant links -->
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css.map') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
         <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
     </head>
     <body>
-        <div class="wrapper container">
+        <div class=container">
+
+            <!-- Login / Signup -->
+            <div class="row text-right"  style="padding-top: 10px; height: 40px;">
+                    <div class="col-12">
+                        <a href="auth/signin"><button class="btn btn-sm btn-landing">SignIn</button></a>
+                        <a href="auth/signup" style="margin-right: 20px;"><button class="btn btn-sm btn-landing">SignUp</button></a>
+                    </div>
+            </div>
+
+
             <!-- Title -->
-            <div class="row title">
-                <h1>ExpressPredict</h1>
-            </div>
-            <!-- Brief Description -->
-            <div class="row description">
-                <div class="col-lg-12"><h3>What it is:</h3></div>
-                <div class="col-lg-12">
-                <p>                
-                    An all-in-one data science suite including functionality for data exploration and 
-                    time-series prediction. 
-                </p>
+            <div class="row title text-center">
+                <div class="col-12">
+                    <br />
+                    <h1><i>ExpressPredict</i></h1>
                 </div>
-                <a href="auth/signin"><button class="btn btn-primary">SignIn</button></a>
-                <a href="auth/signup"><button class="btn btn-primary">SignUp</button></a>
             </div>
+            <br />
+            <br />
+
+
+            <!-- Brief Description -->
+            <div class="row description text-center">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <h3>About</h3><hr>
+                    <p>                
+                        An all-in-one data science suite including functionality for data exploration and 
+                        time-series prediction. This semi-automated suite of tools aims to
+                    </p>
+                </div>
+                <div class="col-4"></div>
+                <br />
+                <br />
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+
+
             <!-- Examples -->
-            <div class="row examples">
-                <h3>Some Examples:</h3>
-                <p>Example 1</p>
-                <p>Example 2</p>
+            <div class="row examples text-center">
+                    <div class="col-4"></div>
+                <div class="col-4">
+                    <h3>Demo</h3>
+                    <hr>
+                    <p>Example 1</p>
+                </div>
+                <div class="col-4"></div>
             </div>
         </div>
     </body>

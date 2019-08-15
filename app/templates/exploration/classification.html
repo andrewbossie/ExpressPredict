@@ -50,7 +50,7 @@
                         </ul>
                 </div>
                 <div class="col-12">
-                    <!-- Logout --> 
+                    <!-- Login / Signup --> 
                     <div class="row text-right"  style="padding-top: 10px; height: 40px;">
                         <div class="col-12">
                             <a href="auth/logout"><button class="btn btn-sm btn-landing"  style="margin-right: 20px;">Logout</button></a>
@@ -62,7 +62,7 @@
                     <div class="row title text-center">
                         <div class="col-12">
                             <br />
-                            <h1><i>User Portal</i></h1>
+                            <h1><i>Classification Exploration</i></h1>
                         </div>
                     </div>
                     <br />
@@ -73,9 +73,13 @@
                     <div class="row description text-center">
                         <div class="col-4"></div>
                         <div class="col-4">
-                            <h3>User Notifications</h3><hr>
-                            <p>                
-                                Previously Saved Models Here.
+                            <!-- <h3>Information</h3>
+                            <hr> -->
+                            <p>  
+                                Exploration and visualization is an indespensible step in effetcivly understanding you data.        
+                                In this module you can upload your classification data and our semi-autonomous exploration algorithm will 
+                                attempt to analyze and give you some insight. These include heatmaps, plots and
+                                statictical information.
                             </p>
                         </div>
                         <div class="col-4"></div>
@@ -88,13 +92,21 @@
                     <br />
 
 
-                    <!-- Examples -->
+                    <!-- File Upload -->
                     <div class="row examples text-center">
                         <div class="col-4"></div>
                         <div class="col-4">
-                            <h3>Getting Started</h3>
-                            <hr>
-                            <p>Start by selecting a module in the sidebar or read this short introductory tutorial.</p>
+                                <h3 class="text-center">1. Upload a File</h3>
+                                <hr>
+                                <form method="POST" action="." role="form">
+                                        {{ form.csrf_token }}
+                                        <label>First Name</label>
+                                        {{ form.data(class_='form-control') }}<br />
+                                        <br />
+                                        <div class="col-12 text-center">
+                                            <button class="btn btn-md btn-landing" type="submit" name="submit">Submit</button>
+                                        </form>
+                                </form>
                         </div>
                         <div class="col-4"></div>
                     </div>

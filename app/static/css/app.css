@@ -1,24 +1,36 @@
-html {
-    font-family: Arial, Helvetica, sans-serif;
+@font-face{
+    font-family: hk-medium;
+    src: url('/static/fonts/HKGrotesk-Medium.otf');
 }
 
-.wrapper {
-    display: flex;
-    width: 100%;
+body{
+    background-color: aliceblue;
+    font-family: hk-medium;
+}
+
+.btn-landing{
+    background-color: #0c4c57;
+    color: aliceblue;
+    outline: none;
+}
+
+.sidebar{
+    overflow:hidden;
+    background-color: #0c4c57;
+    color: aliceblue;
+}
+
+.parent-collapse{
+    cursor: pointer;
 }
 
 .title {
     text-align: center;
 }
 
-#sidebar {
-    width: 250px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 999;
-    background: #7386D5;
-    color: #fff;
-    transition: all 0.3s;
+.menu-list{
+    list-style: none;
+    list-style-position:inside;
+        margin:0;
+        padding:0;
 }
