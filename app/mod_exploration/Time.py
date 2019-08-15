@@ -35,7 +35,7 @@ class Time(db.Model):
         df_flat = pd.DataFrame(df.sum(axis=0))
         df_flat = df_flat.to_numpy()
 
-        return df_flat
+        return [df_flat,df.columns]
 
     # Scale Data
     def doStandardScale(self, dataframe):

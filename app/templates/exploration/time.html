@@ -246,7 +246,7 @@
                     }, 600);
 
                     // Raw Chart
-                    var raw_labels = ['1' ,'2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+                    var raw_labels = response['columns'];
 
                     var raw_data = [];
                     for(var i = 0; i < response['raw'].length; i++){
@@ -261,7 +261,7 @@
                             datasets: [{
                                 data: raw_data,
                                 borderColor: [
-                                    'rgba(54, 162, 235, 1)'
+                                    'rgba(187, 59, 73, 1)'
                                 ],
                                 borderWidth: 1
                             }]
@@ -269,21 +269,28 @@
                         options: {
                             scales: {
                                 yAxes: [{
+                                    labelString: response['y'],
                                     ticks: {
                                         beginAtZero: true
                                     }
-                                }]
+                                }],
+                                xAxes: [{
+                                    labelString: response['x']
+                                }],
                             },
                             elements: {
                                 line: {
                                     tension: 0 // disables bezier curves
                                 }
-                            }
+                            },
+                            legend: {
+                                display: false
+                            },
                         }
                     });
 
                     // Formatted Chart
-                    var formatted_labels = ['1' ,'2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+                    var formatted_labels = response['columns'];
 
                     var formatted_data = [];
                     for(var i = 0; i < response['formatted'].length; i++){
@@ -299,7 +306,7 @@
                             datasets: [{
                                 data: formatted_data,
                                 borderColor: [
-                                    'rgba(54, 162, 235, 1)'
+                                    'rgba(187, 59, 73, 1)'
                                 ],
                                 borderWidth: 1
                             }]
@@ -307,27 +314,34 @@
                         options: {
                             scales: {
                                 yAxes: [{
+                                    labelString: response['y'],
                                     ticks: {
                                         beginAtZero: true
                                     }
-                                }]
+                                }],
+                                xAxes: [{
+                                    labelString: response['x']
+                                }],
                             },
                             elements: {
                                 line: {
                                     tension: 0 // disables bezier curves
                                 }
-                            }
+                            },
+                            legend: {
+                                display: false
+                            },
                         }
                     });
 
                 //    Sample Stats
                     $('#sample_stats').html(
-                        'Raw Mean: ' + response['raw_mean'] + '<br />' +
-                        'Raw Variance: ' + response['raw_var'] + '<br />' +
-                        'Raw Std: ' + response['raw_std'] + '<br />' +
-                        'Formatted Mean: ' + response['formatted_mean'] + '<br />' +
-                        'Formatted Variance: ' + response['formatted_var'] + '<br />' +
-                        'Formatted Std: ' + response['formatted_std'] + '<br />'
+                        '<strong>Raw Mean:</strong> ' + response['raw_mean'] + '<br />' +
+                        '<strong>Raw Variance:</strong> ' + response['raw_var'] + '<br />' +
+                        '<strong>Raw Std:</strong> ' + response['raw_std'] + '<br />' +
+                        '<strong>Formatted Mean:</strong> ' + response['formatted_mean'] + '<br />' +
+                        '<strong>Formatted Variance:</strong> ' + response['formatted_var'] + '<br />' +
+                        '<strong>Formatted Std:</strong> ' + response['formatted_std'] + '<br />'
                     );
                 },
                 error: function(error){

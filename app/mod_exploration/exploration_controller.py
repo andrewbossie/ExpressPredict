@@ -67,8 +67,6 @@ def upload():
         file = request.files['data_file']
         filename = secure_filename(file.filename)
         f = filename.split('.')
-        print request.x.data
-        exit()
 
         file_loc = 'uploads/' + f[0] + '_' + str(cur_time) + '.' + f[1]
         file.save(file_loc)
@@ -77,7 +75,8 @@ def upload():
         ts = Time()
 
         # Convert raw to DF
-        raw_df = ts.doDataframe(file_loc)
+        dataframe = ts.doDataframe(file_loc)
+        raw_df = dataframe[0]
 
         # To-Do Autocorrelation Plots
 
@@ -87,8 +86,6 @@ def upload():
 
         # Dicky-Fuller test for stationality
         fuller = ts.doFuller(df_norm.transpose()[0])
-        print df_raw.columns
-        exit()
         p = fuller[1]
 
         # While the p-value is less than the critical value...
@@ -116,15 +113,16 @@ def upload():
         response = {}
         response['raw'] = raw_df.tolist()
         response['formatted'] = df_final.tolist()
-        response['raw_mean'] = r_mean
-        response['formatted_mean'] = f_mean
-        response['raw_std'] = r_std
-        response['raw_var'] = r_var
-        response['formatted_std'] = f_std
-        response['formatted_var'] = f_var
+        response['columns'] = dataframe[1].tolist()
+        response['raw_mean'] = round(r_mean, 3)
+        response['formatted_mean'] = round(f_mean, 3)
+        response['raw_std'] = round(r_std, 3)
+        response['raw_var'] = round(r_var, 3)
+        response['formatted_std'] = round(f_std, 3)
+        response['formatted_var'] = round(f_var, 3)
         response['fuller'] = final_fuller
-#         response['x'] =
-#         response['y'] =
+        response['x'] = request.form.get('x')
+        response['y'] = request.form.get('y')
 
     return jsonify(response)
 
