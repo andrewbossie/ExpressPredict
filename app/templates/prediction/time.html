@@ -7,8 +7,9 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css.map') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
         <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/explore.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/predict.js') }}"></script>
         <script src="{{ url_for('static', filename='js/Chart.bundle.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
         <style>
             ul{
                 list-style-type:none;
@@ -79,7 +80,7 @@
                             <div class="col-md-3"></div>
                         <div class="col-md-4">
                             <br />
-                            <h1>Explore | Time-Series</h1>
+                            <h1>Predict | Time-Series</h1>
                         </div>
                         <div class="col-md-5"></div>
                     </div>
@@ -93,10 +94,9 @@
                         <div class="col-md-4">
                             <!-- <h3>Information</h3><hr> -->
                             <p>   
-                                Exploration and visualization is an indispensible step in effectively understanding your data.             
-                                In this module you can upload your time-series data and our semi-autonomous exploration algorithm will 
-                                attempt to analyze and give you some insight. These include heatmaps, plots and
-                                statistical information. 
+                                This module allows you to upload your univariate time-series data which
+                                our semi-autonomous will give you predictions. Please do not leave the page while the model
+                                is running. 
                             </p>
                         </div>
                         <div class="col-md-5"></div>
@@ -113,14 +113,14 @@
                     <div class="row text-center">
                         <div class="col-md-3"></div>
                         <div class="col-md-4">
-                                <h3 class="text-center">Upload a File &#709;</h3>
+                                <h3 class="text-center upload-title">Upload a File &#709;</h3>
                                 <hr>
                                 <br />
                                 <div class="row upload-collapse">
                                     <form id="uploadForm" method="POST" enctype="multipart/form-data" action="#" role="form">
                                             {{ form.csrf_token }}
                                             {{ form.data_file() }}
-                                            <p class="text-center" style="margin-top: 5px;"><small><i>(CSV or EXCEL only. Header row expected)</i></small></p>
+                                            <p class="text-center" style="margin-top: 5px;"><small><i>(CSV or EXCEL only. Expected dimenstions: n x 2 or 2 x n)</i></small></p>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <br />
@@ -133,6 +133,33 @@
                                                     {{ form.y(class_='form-control') }}
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Prediction Method:</label>
+                                                    {{ form.method(class_='form-control') }}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Time-Steps to Predict</label>
+                                                    {{ form.num_preds(class_='form-control') }}
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="row">
+                                                <h6 class="advanced-toggle">Advanced &#8250;</h6>
+                                                <div class="row advanced" style="display:none;">
+                                                    <p><i><small>* This is intended for advanced users. 
+                                                        De-trended data expected.</small></i></p>
+                                                    <div class="col-md-6">
+                                                        <label>P-Value:</label>
+                                                        
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Q-Value</label>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
                                             <label>Is Data Measured in Currency?</label>
                                             <br />
                                             {{ form.currency() }}
@@ -151,16 +178,16 @@
                     <br />
                     <br />
 
-                    <!-- Raw Plot with Trend Line -->
-                    <div class="row text-center formatted">
+                    <!-- Prediction Plot with Trend Line -->
+                    <div class="row text-center final">
                             <div class="col-md-2"></div>
                             <div class="col-md-6">
-                                    <h3 class="text-center">Raw Plot &#8250;</h3>
+                                    <h3 class="text-center">Prediction Plot &#8250;</h3>
                                     <hr>
                                     <br />
-                                    <div class="row raw-collapse" style="display: none;">
+                                    <div class="row final-collapse" style="display: none;">
                                         <div id="raw">
-                                            <canvas id="raw_chart" width="700" height="400"></canvas>
+                                            <canvas id="final_chart" width="700" height="400"></canvas>
                                         </div>
                                     </div>
                             </div>
@@ -171,165 +198,96 @@
                     <br />
                     <br />
 
-                    <!-- Seasonality Reduction with # of Reductions -->
-                    <div class="row text-center">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-6">
-                                    <h3 class="text-center">De-Trend Plot &#8250;</h3>
-                                    <hr>
-                                <br />
-                                <div class="row formatted-collapse" style="display: none;">
-                                    <div id="formatted">
-                                        <canvas id="formatted_chart" width="700" height="400"></canvas>
-                                        <p><i>(Note: Formatted data will result in n - 1 data points compared to the input values)</i></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4"></div>
-                    </div>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-
-                    <!-- Stats / Dicky Fuller -->
-                    <div class="row text-center">
-                            <div class="col-md-3"></div>
-                            <div class="col-4">
-                                    <h3 class="text-center">Sample Statistics & <br />Dicky Fuller Analysis &#8250;</h3>
-                                    <hr>
-                                    <div class="text-left" id="sample_stats"></div>
-                            </div>
-                            <div class="col-md-5"></div>
-                    </div>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
+                    <!-- Prediction Values -->
+                    <!-- <div class="row text-center">
+                        <div class="col-md-3"></div>
+                        <div class="col-4">
+                                <h3 class="text-center">Prediction Values &#8250;</h3>
+                                <hr>
+                                <div class="text-left" id="sample_stats"></div>
+                        </div>
+                        <div class="col-md-5"></div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br /> -->
 
                 </div>
             </div>
         </div>
+
+
+        <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content" style="width: 300px">
+                        <span style="text-align: center; margin: 0 auto; top:50%">Running. Please do not navigate away from this page.</span>
+                    </div>
+                </div>
+            </div>
+
     </body>
     <script>
+
         $('.submit-time').on('click', function(e){
 
             e.preventDefault;
-            $('.upload-collapse').slideUp('slow');
+            // $('.upload-collapse').slideToggle('slow');
 
             var form = $('#uploadForm')[0];
             var form_data = new FormData(form);
 
+            // $('.modal').modal('show');
+
             // send file and vars to back end for processing
             $.ajax({
-                url: '/explore/upload',
+                url: '/predict/uploadTime',
                 type: 'POST',
                 data: form_data,
                 cache: false,
                 contentType : false,
                 processData : false,
                 success: function(response){
-                    console.log(response);
+                    // console.log(response);
+
+                    // $('.modal').modal('hide');
 
                     // Focus on formatted plot
                     $('body, html').animate({
-                        scrollTop: $(".formatted").offset().top - 300
+                        scrollTop: $(".final").offset().top - 300
                     }, 600);
 
                     // Raw Chart
                     var raw_labels = response['columns'];
+                    
+                    for(var i = 1; i <= response['num_preds']; i++){
+                        raw_labels.push('+' + i)
+                    }
+
+                    // console.log(raw_labels)
 
                     var raw_data = [];
-                    for(var i = 0; i < response['raw'].length; i++){
-                        raw_data[i] = response['raw'][i][0]
+                    for(var i = 0; i < response['final'].length; i++){
+                        raw_data[i] = response['final'][i][0]
                     }
 
-                    var raw_rolling = [];
-                    for(var i = 0; i < response['raw_rolling'].length; i++){
-                        raw_rolling[i] = response['raw_rolling'][i]
-                    }
-
-                    $('.raw-collapse').show('slow');
-                    var ctx = document.getElementById('raw_chart').getContext('2d');
+                    $('.final-collapse').show('slow');
+                    var ctx = document.getElementById('final_chart').getContext('2d');
                     var myChart = new Chart(ctx, {
                         type: 'line',
                         data: {
                             labels: raw_labels,
                             datasets: [{
-                                data: raw_data,
+                                data: raw_data.slice(0, raw_data.length-response['num_preds'].length),
                                 borderColor: [
                                     'rgba(12, 76, 87, 1)'
                                 ],
                                 fill: false,
                                 borderWidth: 1
-                            },
-                                {
-                                    data: raw_rolling[0],
-                                    borderColor: [
-                                        'rgba(187, 59, 73, 1)'
-                                    ],
-                                    fill: false,
-                                    borderWidth: 1
-                                }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    labelString: response['y'],
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }],
-                                xAxes: [{
-                                    labelString: response['x']
-                                }],
-                            },
-                            elements: {
-                                line: {
-                                    tension: 0 // disables bezier curves
-                                }
-                            },
-                            legend: {
-                                display: true,
-                                labels: {
-                                    data: ['Sales', 'Mean']
-                                },
-                            },
-                        }
-                    });
-
-                    // Formatted Chart
-                    var formatted_labels = response['columns'];
-
-                    var formatted_data = [];
-                    for(var i = 0; i < response['formatted'].length; i++){
-                        formatted_data[i] = response['formatted'][i]
-                    }
-
-                    var formatted_rolling = [];
-                    for(var i = 0; i < response['final_rolling'].length; i++){
-                        formatted_rolling[i] = response['final_rolling'][i]
-                    }
-
-                    console.log(formatted_rolling);
-
-                    $('.formatted-collapse').show('slow');
-                    var ftx = document.getElementById('formatted_chart').getContext('2d');
-                    var formattedChart = new Chart(ftx, {
-                        type: 'line',
-                        data: {
-                            labels: formatted_labels,
-                            datasets: [{
-                                data: formatted_data,
+                            },{
+                                data: raw_data.slice(raw_data.length-response['num_preds'].length, raw_data.length),
                                 borderColor: [
-                                    'rgba(12, 76, 87, 1)'
-                                ],
-                                fill: false,
-                                borderWidth: 1
-                            }, {
-                                data: formatted_rolling[0],
-                                borderColor: [
-                                    'rgba(187, 59, 73, 1)'
+                                    'rgba(255, 0, 0, 1)'
                                 ],
                                 fill: false,
                                 borderWidth: 1
@@ -338,13 +296,19 @@
                         options: {
                             scales: {
                                 yAxes: [{
-                                    labelString: response['y'],
+                                    scaleLabel: {
+                                        labelString: response['y'],
+                                        display: true
+                                    },
                                     ticks: {
                                         beginAtZero: true
                                     }
                                 }],
                                 xAxes: [{
-                                    labelString: response['x']
+                                    scaleLabel: {
+                                        labelString: response['x'],
+                                        display: true
+                                    }
                                 }],
                             },
                             elements: {
@@ -353,16 +317,16 @@
                                 }
                             },
                             legend: {
-                                display: true,
+                                display: false,
                                 labels: {
                                     data: ['Sales', 'Mean']
-                                }
+                                },
                             },
                         }
                     });
 
                 //    Sample Stats
-                    $('#sample_stats').html(
+                    $('#sample-stats').html(
                         '<strong>Raw Mean:</strong> ' + response['raw_mean'] + '<br />' +
                         '<strong>Raw Variance:</strong> ' + response['raw_var'] + '<br />' +
                         '<strong>Raw Std:</strong> ' + response['raw_std'] + '<br />' +
@@ -375,6 +339,10 @@
                     console.log(error);
                 }
             });
+        });
+
+        $('.upload-title').on('click', function(){
+            $('.upload-collapse').slideToggle('slow');
         });
     </script>
 </html>

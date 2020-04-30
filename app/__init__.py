@@ -28,14 +28,14 @@ db = SQLAlchemy(app)
 from app.mod_auth.auth_controller import mod_auth as auth_module
 from app.mod_main.main_controller import mod_main as main_module
 from app.mod_exploration.exploration_controller import mod_explore as explore_module
-# from app.mod_regression.controller import mod_regression as regression_module
+from app.mod_prediction.prediction_controller import mod_prediction as prediction_module
 # from app.mod_exploration.controller import mod_exploration as exploration_module
 
 # Register blueprint(s)
 app.register_blueprint(auth_module)
 app.register_blueprint(main_module)
 app.register_blueprint(explore_module)
-# app.register_blueprint(exploration_module)
+app.register_blueprint(prediction_module)
 
 # Build the database:
 # This will create the database file using SQLAlchemy
